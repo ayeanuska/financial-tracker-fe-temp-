@@ -4,6 +4,7 @@ import { useUser } from "../context/UserContext";
 
 export const Auth = ({ children }) => {
   const { user } = useUser();
+  const location = useLocation();
   return (
     <>
       {user?._id ? (

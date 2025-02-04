@@ -11,8 +11,10 @@ import { CiBank } from "react-icons/ci";
 import { useUser } from "../../context/UserContext";
 
 export const Header = () => {
-  const { user } = useUser();
-  const handleOnLogOut = () => {};
+  const { user, logout } = useUser();
+  const handleOnLogOut = () => {
+    logout();
+  };
 
   return (
     <Navbar expand="lg" variant="dark" className="bg-body-dark">
