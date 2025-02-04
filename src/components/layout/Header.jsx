@@ -8,9 +8,10 @@ import { HiOutlineLogin } from "react-icons/hi";
 import { IoCreate } from "react-icons/io5";
 import { RiDashboard3Fill } from "react-icons/ri";
 import { CiBank } from "react-icons/ci";
+import { useUser } from "../../context/UserContext";
 
 export const Header = () => {
-  const { user } = userProvider();
+  const { user } = useUser();
   const handleOnLogOut = () => {};
 
   return (

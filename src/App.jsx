@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Transaction from "./pages/Transaction";
 import { Auth } from "./auth/Auth";
 import { useEffect } from "react";
+import { useUser } from "./context/UserContext";
 
 function App() {
   const contextObject = useUser();
@@ -25,10 +26,25 @@ function App() {
           {/* signup Page */}
           <Route path="signup" element={<SignUp />} />
           {/* dashboard Page */}
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route
+            path="dashboard"
+            element={
+              <Auth>
+                <Dashboard />{" "}
+              </Auth>
+            }
+          />
 
           {/* Transaction Page */}
-          <Route path="transaction" element={<Transaction />} />
+          <Route
+            path="transaction"
+            element={
+              <Auth>
+                {" "}
+                <Transaction />{" "}
+              </Auth>
+            }
+          />
         </Route>
       </Routes>
 

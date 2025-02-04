@@ -1,7 +1,7 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
-export const userProvider = (props) => {
+export const UserProvider = (props) => {
   const [user, setUser] = useState({});
 
   const ProviderObject = {
@@ -15,4 +15,4 @@ export const userProvider = (props) => {
     </UserContext.Provider>
   );
 };
-export const UseUser = () => useContext(UserContext);
+export const useUser = () => useContext(UserContext);
