@@ -10,6 +10,7 @@ import { RiDashboard3Fill } from "react-icons/ri";
 import { CiBank } from "react-icons/ci";
 
 export const Header = () => {
+  const { user } = userProvider();
   const handleOnLogOut = () => {};
 
   return (
@@ -20,7 +21,7 @@ export const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            {false ? (
+            {user?._id ? (
               <>
                 <Nav.Link as={Link} to="/dashboard">
                   <RiDashboard3Fill /> Dashboard

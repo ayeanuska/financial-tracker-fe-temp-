@@ -12,6 +12,7 @@ import { Auth } from "./auth/Auth";
 import { useEffect } from "react";
 
 function App() {
+  const contextObject = useUser();
   useEffect(() => {}, []);
 
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="transaction" element={<Transaction />} />
         </Route>
       </Routes>
+
       <ToastContainer />
     </div>
   );

@@ -4,13 +4,18 @@ import { CustomInput } from "./CustomInput";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   email: "",
   password: "",
 };
 export const SignInForm = () => {
+  const { setUser } = useUser();
+
   const [form, setForm] = useState(initialState);
+
+  const navigate = useNavigate();
 
   useEffect(() => {}, []);
 
@@ -51,8 +56,14 @@ export const SignInForm = () => {
       );
       toast.success(response.data.message);
 
+      //update the user context
+      setUser(response.data.user);
+
       //store the jwt access token to local storage
       localStorage.setItem("accessToken", response.data.accessToken);
+
+      //navigate to dahboardpage
+      navigate("/dashboard");
     } catch (err) {
       console.log(err);
       toast.error(err.response.data.message);
