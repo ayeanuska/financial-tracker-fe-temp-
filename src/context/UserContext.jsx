@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
@@ -6,7 +7,9 @@ export const UserProvider = (props) => {
   const [user, setUser] = useState({});
 
   const logout = () => {
+    //empty user
     setUser({});
+
     //remove jwt token
     localStorage.removeItem("accessJWT");
   };
@@ -14,18 +17,19 @@ export const UserProvider = (props) => {
   const autologin = async () => {
     //get the access token from local sTORAGE
 
-    const Token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
     console.log("accessToken");
 
-    if (Token) {
+    if (token) {
       //call user detail api
-      const response = await axios.get("", {
+      const response = await axios.get("http://localhost:9001/api/v1/users", {
         headers: {
           Authorization: token,
         },
       });
 
       if (response.data && response.data.status == "success") {
+        //token is valid
         setUser(response.data.user);
         return true;
       } else {
