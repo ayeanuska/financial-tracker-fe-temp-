@@ -13,8 +13,15 @@ import { useEffect } from "react";
 import { useUser } from "./context/UserContext";
 
 function App() {
-  const contextObject = useUser();
-  useEffect(() => {}, []);
+  const { autologin, user } = useUser();
+
+  const loginFromToken = async () => {
+    return await autologin();
+  };
+
+  useEffect(() => {
+    !user?._id && loginFromToken();
+  }, [user?._id]);
 
   return (
     <div className="wrapper">
@@ -30,7 +37,7 @@ function App() {
             path="dashboard"
             element={
               <Auth>
-                <Dashboard />{" "}
+                <Dashboard />
               </Auth>
             }
           />
@@ -40,8 +47,7 @@ function App() {
             path="transaction"
             element={
               <Auth>
-                {" "}
-                <Transaction />{" "}
+                <Transaction />
               </Auth>
             }
           />

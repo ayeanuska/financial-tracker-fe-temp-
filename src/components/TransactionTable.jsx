@@ -16,8 +16,22 @@ export const TransactionTable = () => {
   ]);
 
   const [idsToDelete, setIdsToDelete] = useState([]);
+  const fetchTransaction = async () => {
+    const response = await axios.get(
+      "http://localhost:9001/api/v1/transactions",
+      {
+        headers: {
+          Authoriaztion: Token,
+        },
+      }
+    );
+    setDisplayTran(response.data.transaction);
+    console.log("RESPONSE TRANSACTION ", response.data.transaction);
+  };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
 
   const handleOnSearch = (e) => {};
 
@@ -74,13 +88,13 @@ export const TransactionTable = () => {
                   />
                 </td>
                 <td>{t.title}</td>
-                {t.type === "expenses" && (
+                {t.type === "Expenses" && (
                   <>
                     <td className="out">-${t.amount} </td>
                     <td> </td>
                   </>
                 )}
-                {t.type === "income" && (
+                {t.type === "Income" && (
                   <>
                     <td> </td>
                     <td className="in">${t.amount} </td>
@@ -116,7 +130,7 @@ export const TransactionTable = () => {
             <td colSpan={2}>
               $
               {displyTran.reduce((acc, t) => {
-                return t.type === "income" ? acc + t.amount : acc - t.amount;
+                return t.type === "Income" ? acc + t.amount : acc - t.amount;
               }, 0)}{" "}
             </td>
           </tr>
