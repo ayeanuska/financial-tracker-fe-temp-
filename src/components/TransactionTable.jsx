@@ -3,37 +3,36 @@ import { Button } from "react-bootstrap";
 import { FaPlusCircle } from "react-icons/fa";
 import { Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useUser } from "../context/UserContext";
+import { useTransaction } from "../context/TransactionContext";
 
 export const TransactionTable = () => {
-  const [displyTran, setDisplayTran] = useState([
-    {
-      createdAt: "2024-01-02",
-      _id: "1",
-      title: "Grocery",
-      amount: 1000,
-      type: "income",
-    },
-  ]);
+  const { setShowTransactionModal } = useUser();
+  const { transactions, setTransactions, fetchTransaction } = useTransaction();
 
+  const [displayTran, setDisplayTran] = useState(transactions);
   const [idsToDelete, setIdsToDelete] = useState([]);
-  const fetchTransaction = async () => {
-    const response = await axios.get(
-      "http://localhost:9001/api/v1/transactions",
-      {
-        headers: {
-          Authoriaztion: Token,
-        },
-      }
-    );
-    setDisplayTran(response.data.transaction);
-    console.log("RESPONSE TRANSACTION ", response.data.transaction);
-  };
 
+  //fetch transaction data
   useEffect(() => {
     fetchTransaction();
   }, []);
 
-  const handleOnSearch = (e) => {};
+  //update temp display transaction variable
+  useEffect(() => {
+    console.log("useeffect", transactions);
+    setDisplayTran(transactions);
+  }, [transactions]);
+
+  const handleOnSearch = (e) => {
+    console.log(e.target.value);
+
+    const tempTransaction = transactions.filter((item) => {
+      return item.description.includes(e.target.value);
+    });
+    setDisplayTran(tempTransaction);
+  };
 
   const handleOnSelect = (e) => {};
 
@@ -42,7 +41,7 @@ export const TransactionTable = () => {
   return (
     <>
       <div className="d-flex justify-content-between pt-3 mb-4">
-        <div>{displyTran.length} transaction(s) found!</div>
+        <div>{displayTran.length} transaction(s) found!</div>
         <div>
           <Form.Control
             placeholder="Search transactions..."
@@ -51,7 +50,7 @@ export const TransactionTable = () => {
           />
         </div>
         <div>
-          <Button onClick={() => toggleModal(true)}>
+          <Button onClick={() => setShowTransactionModal(true)}>
             <FaPlusCircle /> Add New Transaction
           </Button>
         </div>
@@ -61,7 +60,7 @@ export const TransactionTable = () => {
           label="Select All"
           value="all"
           onChange={handleOnSelect}
-          checked={displyTran.length === idsToDelete.length}
+          checked={displayTran.length === idsToDelete.length}
         />
       </div>
       <Table striped hover>
@@ -75,8 +74,8 @@ export const TransactionTable = () => {
           </tr>
         </thead>
         <tbody>
-          {displyTran.length > 0 &&
-            displyTran.map((t, i) => (
+          {displayTran.length > 0 &&
+            displayTran.map((t, i) => (
               <tr key={t._id}>
                 <td>{i + 1}</td>
                 <td>
@@ -129,7 +128,7 @@ export const TransactionTable = () => {
 
             <td colSpan={2}>
               $
-              {displyTran.reduce((acc, t) => {
+              {displayTran.reduce((acc, t) => {
                 return t.type === "Income" ? acc + t.amount : acc - t.amount;
               }, 0)}{" "}
             </td>

@@ -5,6 +5,7 @@ const UserContext = createContext();
 
 export const UserProvider = (props) => {
   const [user, setUser] = useState({});
+  const [showTransactionModal, setShowtransactionModal] = useState(false);
 
   const logout = () => {
     //empty user
@@ -44,6 +45,8 @@ export const UserProvider = (props) => {
     setUser,
     logout,
     autologin,
+    showTransactionModal,
+    setShowtransactionModal,
   };
 
   return (

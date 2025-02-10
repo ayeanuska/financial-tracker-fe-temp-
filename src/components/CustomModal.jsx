@@ -1,10 +1,14 @@
 import Modal from "react-bootstrap/Modal";
+import { useUser } from "../context/UserContext";
 
 export const CustomModal = ({ children }) => {
+  const { showTransactionModal, setShowTransactionModal } = useUser();
   return (
     <Modal
-      show={false}
-      onHide={() => {}}
+      show={showTransactionModal}
+      onHide={() => {
+        setShowTransactionModal(false);
+      }}
       backdrop="static"
       keyboard={false}
       centered

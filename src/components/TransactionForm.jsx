@@ -10,9 +10,36 @@ const initialState = {
 };
 
 export const TransactionForm = () => {
+  const [form, setForm] = useState(initialState);
+
   const handleOnChange = async (e) => {};
 
-  const handleOnSubmit = async (e) => {};
+  const handleOnSubmit = async (e) => {
+    //prevent default
+    e.preventDefault();
+
+    console.log(form);
+
+    //call post api to create transaction
+
+    const token = localStorage.getItem("accessToken");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:9001/api/v1/transactions ",
+        form,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      toast.sucess(response.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fields = [
     {
@@ -49,8 +76,8 @@ export const TransactionForm = () => {
           <Form.Label>Transaction type</Form.Label>
           <Form.Select name="type" onChange={handleOnChange} required>
             <option value="">-- select --</option>
-            <option value="income">Income</option>
-            <option value="expenses">Expenses</option>
+            <option value="Income">Income</option>
+            <option value="Expenses">Expenses</option>
           </Form.Select>
         </Form.Group>
         {fields.map((input) => (
