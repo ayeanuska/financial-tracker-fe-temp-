@@ -6,37 +6,95 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import { useTransaction } from "../context/TransactionContext";
+import { toast, Zoom } from "react-toastify";
 
 export const TransactionTable = () => {
-  const { setShowTransactionModal } = useUser();
-  const { transactions, setTransactions, fetchTransaction } = useTransaction();
+  const { setShowModal } = useUser();
+  const { transactions, fetchTransaction } = useTransaction();
 
   const [displayTran, setDisplayTran] = useState(transactions);
   const [idsToDelete, setIdsToDelete] = useState([]);
 
   //fetch transaction data
   useEffect(() => {
+    console.log("first use effect", transactions);
     fetchTransaction();
   }, []);
 
   //update temp display transaction variable
   useEffect(() => {
-    console.log("useeffect", transactions);
+    console.log("useeffect 2", transactions);
     setDisplayTran(transactions);
   }, [transactions]);
 
   const handleOnSearch = (e) => {
-    console.log(e.target.value);
+    const originalTransaction = transactions;
 
-    const tempTransaction = transactions.filter((item) => {
+    const filteredTransaction = originalTransaction.filter((item) => {
       return item.description.includes(e.target.value);
     });
-    setDisplayTran(tempTransaction);
+
+    setDisplayTran(filteredTransaction);
   };
 
-  const handleOnSelect = (e) => {};
+  const handleOnSelect = (e) => {
+    alert(e.target.value);
+    alert(e.target.checked);
 
-  const handleOnDelete = async () => {};
+    if (e.target.value == "all") {
+      e.target.checked
+        ? setIdsToDelete(transactions.map((item) => item._id))
+        : setIdsToDelete([]);
+      return;
+    }
+
+    if (e.target.checked == true) {
+      if (!idsToDelete.includes(e.target.value)) {
+        const tempIds = [...idsToDelete];
+        tempIds.push(e.target.value);
+        setIdsToDelete(tempIds);
+      }
+    } else {
+      const tempIds = idsToDelete.filter((item) => item != e.target.value);
+      console.log(tempIds);
+      console.log(tempIds);
+      setIdsToDelete(tempIds);
+    }
+  };
+
+  const handleOnDelete = async () => {
+    // get the access token
+    const token = localStorage.getItem("accessToken");
+    // call delete transaction api
+    const response = await axios({
+      method: "delete",
+      url: "http://localhost:9001/api/v1/transactions",
+      data: {
+        transactions: idsToDelete,
+      },
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    toast.success(response.data.message, {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Zoom,
+    });
+
+    alert("Transactions deleted");
+
+    setIdsToDelete([]);
+
+    fetchTransaction();
+  };
 
   return (
     <>
@@ -50,7 +108,7 @@ export const TransactionTable = () => {
           />
         </div>
         <div>
-          <Button onClick={() => setShowTransactionModal(true)}>
+          <Button onClick={() => setShowModal(true)}>
             <FaPlusCircle /> Add New Transaction
           </Button>
         </div>

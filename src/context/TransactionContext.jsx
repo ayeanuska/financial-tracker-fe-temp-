@@ -6,6 +6,7 @@ const TransactionContext = createContext();
 export const TransactionProvider = (props) => {
   const [transactions, setTransactions] = useState([]);
 
+  // fetch transaction from api and fill displatTransaction variable
   const fetchTransaction = async () => {
     const token = localStorage.getItem("accessToken");
     const response = await axios.get(
@@ -16,7 +17,7 @@ export const TransactionProvider = (props) => {
         },
       }
     );
-    setDisplayTran(response.data.transaction);
+    setTransactions(response.data.transaction);
     console.log("RESPONSE TRANSACTION ", response.data.transaction);
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { CustomInput } from "./CustomInput";
+import { useForm } from "../hooks/useForm";
 
 const initialState = {
   type: "",
@@ -10,9 +11,7 @@ const initialState = {
 };
 
 export const TransactionForm = () => {
-  const [form, setForm] = useState(initialState);
-
-  const handleOnChange = async (e) => {};
+  const { form, setForm, handleOnChange } = useForm(initialState);
 
   const handleOnSubmit = async (e) => {
     //prevent default
