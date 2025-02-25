@@ -9,11 +9,19 @@ import incomeIcon from "../assets/income.png";
 import { useEffect, useState } from "react";
 import { formatChartData } from "../../helpers/chartDataHelper";
 import BarChart from "./chart/BarChart";
+import { useTransaction } from "../context/TransactionContext";
 
 export default function DashboardChart() {
-  const [dashboardData, setDashboardData] = useState(formatChartData([]));
+  const { transactions, fetchTransaction } = useTransaction();
 
-  useEffect(() => {}, []);
+  const [dashboardData, setDashboardData] = useState(
+    formatChartData(transactions || [])
+  );
+
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
+
   return (
     <>
       <Row>

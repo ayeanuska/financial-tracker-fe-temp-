@@ -145,7 +145,7 @@ export const TransactionTable = () => {
                   />
                 </td>
                 <td>{t.title}</td>
-                {t.type === "Expenses" && (
+                {t.type === "Expense" && (
                   <>
                     <td className="out">-${t.amount} </td>
                     <td> </td>

@@ -3,10 +3,10 @@ const aggregateData = (transactions) => {
   const result = { income: {}, expenses: {} };
 
   transactions.forEach((transaction) => {
-    const date = transaction.tDate.split("T")[0];
-    if (transaction.type === "income") {
+    const date = transaction.date.split("T")[0];
+    if (transaction.type === "Income") {
       result.income[date] = (result.income[date] || 0) + transaction.amount;
-    } else if (transaction.type === "expenses") {
+    } else if (transaction.type === "Expense") {
       result.expenses[date] = (result.expenses[date] || 0) + transaction.amount;
     }
   });
@@ -28,19 +28,19 @@ const prepareChartData = (aggregatedData) => {
 };
 
 export const formatChartData = (transactionData) => {
-  transactionData.sort((a, b) => new Date(a.tDate) - new Date(b.tDate));
+  transactionData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const incomeRecord = transactionData
-    .filter((record) => record.type == "income")
+    .filter((record) => record.type == "Income")
     .map((record) => ({
-      date: record.tDate.split("T")[0],
+      date: record.date.split("T")[0],
       amount: record.amount,
     }));
 
   const expenseRecord = transactionData
-    .filter((record) => record.type == "expenses")
+    .filter((record) => record.type == "Expense")
     .map((record) => ({
-      date: record.tDate.split("T")[0],
+      date: record.date.split("T")[0],
       amount: record.amount,
     }));
 

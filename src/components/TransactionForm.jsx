@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { CustomInput } from "./CustomInput";
 import { useForm } from "../hooks/useForm";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useUser } from "../context/UserContext";
 
 const initialState = {
   type: "",
   title: "",
   amount: "",
-  tDate: "",
+  date: "",
 };
 
 export const TransactionForm = () => {
   const { form, setForm, handleOnChange } = useForm(initialState);
+  const { setShowModal } = useUser();
 
   const handleOnSubmit = async (e) => {
     //prevent default
@@ -34,7 +38,14 @@ export const TransactionForm = () => {
         }
       );
 
-      toast.sucess(response.data.message);
+      console.log(response);
+
+      if (response.data.status == "success") {
+        toast.success(response.data.message);
+        setShowModal(false);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -62,8 +73,8 @@ export const TransactionForm = () => {
 
       required: true,
       type: "date",
-      name: "tDate",
-      value: form.tDate,
+      name: "date",
+      value: form.date,
     },
   ];
 
@@ -76,7 +87,7 @@ export const TransactionForm = () => {
           <Form.Select name="type" onChange={handleOnChange} required>
             <option value="">-- select --</option>
             <option value="Income">Income</option>
-            <option value="Expenses">Expenses</option>
+            <option value="Expense">Expenses</option>
           </Form.Select>
         </Form.Group>
         {fields.map((input) => (
